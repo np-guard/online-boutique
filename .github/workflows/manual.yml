@@ -24,3 +24,4 @@ jobs:
         echo "github.ref: ${{ github.ref }}"
         echo "github.event.number: ${{ github.event.number }}"
         echo "GITHUB_API_URL: $GITHUB_API_URL"
+        echo "github.repository: ${{ github.repository }}"
