@@ -20,7 +20,5 @@ jobs:
       run: |
         echo "github.base_ref: ${{ github.base_ref }}"
         echo "github.head_ref: ${{ github.head_ref }}"
+        echo "github.ref: ${{ github.ref }}"
         echo "GITHUB_API_URL: $GITHUB_API_URL"
-        
-        
-      
