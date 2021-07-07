@@ -38,3 +38,9 @@ jobs:
         run: |
           cd  ${{ github.workspace }}/new
           python ${{ github.workspace }}/network-config-analyzer/network-config-analyzer/nca.py --connectivity . --pod_list release/kubernetes-manifests.yaml --ns_list release --pr_url $GITHUB_API_URL/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments --gh_token ${{ github.token }} --output_format md
+      - name: Connectivity diff
+        env:
+          GHE_TOKEN: ${{ github.token }}
+        run: |
+          cd  ${{ github.workspace }}/new
+          python ${{ github.workspace }}/network-config-analyzer/network-config-analyzer/nca.py --semantic_diff . --base_np_list ${{ github.workspace }}/old --pod_list release/kubernetes-manifests.yaml --ns_list release --pr_url $GITHUB_API_URL/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments --gh_token ${{ github.token }} --output_format md
