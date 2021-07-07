@@ -398,6 +398,7 @@ spec:
           app: frontend
     ports:
     - port: 50051
+    - port: 8080
   podSelector:
     matchLabels:
       app: shippingservice
