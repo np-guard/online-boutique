@@ -21,7 +21,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository:  IBM/network-config-analyzer
-          ref: output_git_comment
           path: network-config-analyzer
       - name: Setup Python
         uses: actions/setup-python@v2.2.2
@@ -38,4 +37,4 @@ jobs:
           GHE_TOKEN: ${{ github.token }}
         run: |
           cd  ${{ github.workspace }}/new
-          python ${{ github.workspace }}/network-config-analyzer/network-config-analyzer/nca.py --connectivity . --pod_list release/kubernetes-manifests.yaml --ns_list release --pr_url $GITHUB_API_URL/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments --gh_token ${{ github.token }}
+          python ${{ github.workspace }}/network-config-analyzer/network-config-analyzer/nca.py --connectivity . --pod_list release/kubernetes-manifests.yaml --ns_list release --pr_url $GITHUB_API_URL/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments --gh_token ${{ github.token }} --output_format md
