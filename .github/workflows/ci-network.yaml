@@ -2,6 +2,7 @@ name: check-network-config
 
 on:
   pull_request:
+  push:
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -20,7 +21,7 @@ jobs:
           path: old
       - uses: actions/checkout@v2
         with:
-          repo:  shift-left-netconfig/network-config-analyzer 
+          repository:  IBM/network-config-analyzer
           path: network-config-analyzer
       - name: Setup Python
         uses: actions/setup-python@v2.2.2
@@ -37,4 +38,10 @@ jobs:
           GHE_TOKEN: ${{ github.token }}
         run: |
           cd  ${{ github.workspace }}/new
-          python  ${{ github.workspace }}/network-config-analyzer/network-config-analyzer/nca.py --connectivity . --pod_list release/kubernetes-manifests.yaml --ns_list release
+          python ${{ github.workspace }}/network-config-analyzer/network-config-analyzer/nca.py --connectivity . --pod_list release/kubernetes-manifests.yaml --ns_list release --pr_url $GITHUB_API_URL/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments --gh_token ${{ github.token }} --output_format md
+      - name: Connectivity diff
+        env:
+          GHE_TOKEN: ${{ github.token }}
+        run: |
+          cd  ${{ github.workspace }}/new
+          python ${{ github.workspace }}/network-config-analyzer/network-config-analyzer/nca.py --semantic_diff ${{ github.workspace }}/old --base_np_list . --pod_list release/kubernetes-manifests.yaml --ns_list release --pr_url $GITHUB_API_URL/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments --gh_token ${{ github.token }} --output_format md

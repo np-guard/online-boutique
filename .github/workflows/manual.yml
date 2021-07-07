@@ -21,4 +21,8 @@ jobs:
         echo "github.base_ref: ${{ github.base_ref }}"
         echo "github.head_ref: ${{ github.head_ref }}"
         echo "github.ref: ${{ github.ref }}"
+        echo "github.event.number: ${{ github.event.number }}"
         echo "GITHUB_API_URL: $GITHUB_API_URL"
+        echo "github.repository: ${{ github.repository }}"
+        echo "url: $GITHUB_API_URL/repos/${{ github.repository }}//pulls/${{ github.event.number }}/comments"
+        curl -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ github.token }}" $GITHUB_API_URL/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments -d '{"body":"body"}'
