@@ -52,6 +52,14 @@ command terminated with exit code 1
 ```
 This shows that the frontend can no longer connect to the payment-service.
 
+### Show connectivity map
+
+We would like to get a summary of the generated connectivity. The Network Connectivity Analyzer tool can show us a summarized view of the connectivity in the cluster using a format similar to firewall rules.
+```
+ ../network-config-analyzer/venv/Scripts/python ../network-config-analyzer/network-config-analyzer/nca.py --connectivity release/microservices-netpols.yaml --pod_list release/kubernetes-manifests.yaml --ns_list release --output_format csv --file_out conn.csv
+```
+The output is stored as CSV, which can then be nicely presented with MS Excel or any other spreadsheet.
+
 ### Add baseline requirements in the synthesis process
 
 We would like to enforce that only deployments with a given label, say `payment_access: yes`,
@@ -64,13 +72,6 @@ We will rerun the synthesis tool and provide it with a baseline-rules file:
 Since `checkoutservice` currently does not have the required label, the synthesis tool reports a conflict (currently as a warning), and the synthesized network policies should deny access. As a result, if the policies are deployed, the application breaks.
 
 After adding the right label to the deployment, synthesis should go smooth, and the application should not break.
-
-### Show connectivity map
-
-We would like to get a summary of the generated connectivity. The Network Connectivity Analyzer tool can show us a summarized view of the connectivity in the cluster using a format similar to firewall rules.
-```
- ../network-config-analyzer/venv/Scripts/python ../network-config-analyzer/network-config-analyzer/nca.py --connectivity release/microservices-netpols.yaml --pod_list release/kubernetes-manifests.yaml --ns_list release
-```
 
 ### Show connectivity diff
 The Network Connectivity Analyzer tool also allows us to compare connectivity configurations, producing a semantic diff showing which connections are added/removed.
