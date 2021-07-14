@@ -22,6 +22,11 @@ jobs:
         with:
           repository:  IBM/network-config-analyzer
           path: network-config-analyzer
+      - uses: actions/checkout@v2
+        with:
+          repository: shift-left-netconfig/baseline-rules-verifier
+          path: baseline-rules-verifier
+          submodules: recursive
       - name: Setup Python
         uses: actions/setup-python@v2.2.2
         with:
@@ -44,3 +49,9 @@ jobs:
         run: |
           cd  ${{ github.workspace }}/new
           python ${{ github.workspace }}/network-config-analyzer/network-config-analyzer/nca.py --semantic_diff ${{ github.workspace }}/old --base_np_list . --pod_list release/kubernetes-manifests.yaml --ns_list release --pr_url $GITHUB_API_URL/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments --gh_token ${{ github.token }} --output_format md || true
+      - name: Baseline requirements validation
+        env:
+          GHE_TOKEN: ${{ github.token }}
+        run: |
+          cd  ${{ github.workspace }}/new
+          python ${{ github.workspace }}/baseline-rules-verifier/src/baseline_verify.py -b ${{ github.workspace }}/baseline-rules-verifier/baseline-rules/examples/allow_access_to_google.yaml -r ${{ github.workspace }}/new ${{ github.workspace }}/new --pr_url $GITHUB_API_URL/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments
