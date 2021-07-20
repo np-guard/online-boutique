@@ -54,4 +54,4 @@ jobs:
           GHE_TOKEN: ${{ github.token }}
         run: |
           cd  ${{ github.workspace }}/new
-          python ${{ github.workspace }}/baseline-rules-verifier/src/baseline_verify.py -b ${{ github.workspace }}/baseline-rules-verifier/baseline-rules/examples/allow_access_to_google.yaml -r release release --pr_url $GITHUB_API_URL/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments
+          python ${{ github.workspace }}/baseline-rules-verifier/src/baseline_verify.py -b ${{ github.workspace }}/baseline-rules-verifier/baseline-rules/examples/restrict_access_to_payment.yaml -b ${{ github.workspace }}/baseline-rules-verifier/baseline-rules/examples/ciso_denied_ports.yaml -r release release --pr_url $GITHUB_API_URL/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments
