@@ -48,7 +48,7 @@ jobs:
           GHE_TOKEN: ${{ github.token }}
         run: |
           cd  ${{ github.workspace }}/new
-          python ${{ github.workspace }}/network-config-analyzer/network-config-analyzer/nca.py --semantic_diff ${{ github.workspace }}/old --base_np_list . --pod_list release/kubernetes-manifests.yaml --ns_list release --pr_url $GITHUB_API_URL/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments --gh_token ${{ github.token }} --output_format md || true
+          python ${{ github.workspace }}/network-config-analyzer/network-config-analyzer/nca.py --semantic_diff . --base_np_list ${{ github.workspace }}/old --pod_list release/kubernetes-manifests.yaml --ns_list release --pr_url $GITHUB_API_URL/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments --gh_token ${{ github.token }} --output_format md || true
       - name: Baseline requirements validation
         env:
           GHE_TOKEN: ${{ github.token }}
