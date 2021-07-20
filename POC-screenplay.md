@@ -8,8 +8,8 @@ We assume that the following tools are already properly installed under the demo
 * [baseline-rules verifier](https://github.com/shift-left-netconfig/baseline-rules-verifier)
 
 ### Deploy Google's microservices demo
-1. Clone a copy of the repo from https://github.com/shift-left-netconfig/microservices-demo
-1. `cd microservices-demo`
+1. Clone a copy of this repo: `git clone git@github.com:shift-left-netconfig/online-boutique.git`
+1. `cd online-boutique`
 1. Change context to `net-demo` namespace: `kubectl config set-context --current --namespace=net-demo`
 1. `kubectl apply -f release/kubernetes-manifests.yaml`
 1. Make sure all pods are running
@@ -18,7 +18,7 @@ We assume that the following tools are already properly installed under the demo
 
 ### Expose a security issue with the application
 Frontend can actually connect to payment-service directly.
-1. Run `kubectl exec frontend-b4df774c5-gpxlt -- wget paymentservice:50051` (replace pod-name with the actual name)
+1. Run `kubectl exec frontend-54d58d8c84-dz9p2 -- wget paymentservice:50051` (replace pod-name with the actual name)
 
 The output looks like
 ```
@@ -29,15 +29,29 @@ command terminated with exit code 1
 So frontend was able to connect to the payment service, it just didn't use the correct arguments.
 
 ### Analyze the repo and synthesize relevant network policies
+**Create a branch for the change (can also use a fork)**
+```
+git checkout -b add_netpols
+```
 
 **Run analysis**
 ```
-../gitsecure-net-top/bin/net-top -dirpath . -commitid bfa5ba496e1ad30cba4545ab93ffa7082bd17eb9 -giturl https://github.com/shift-left-netconfig/microservices-demo -gitbranch matser -outputfile microservices-demo.json
+../cluster-topology-analyzer/bin/net-top -dirpath . -commitid bfa5ba496e1ad30cba4545ab93ffa7082bd17eb9 -giturl https://github.com/shift-left-netconfig/online-boutique -gitbranch matser -outputfile microservices-demo.json
 ```
 **Run synthesis**
 ```
 ../netpol-synthesizer/venv/Scripts/python ../netpol-synthesizer/src/netpol_synth.py microservices-demo.json -o release/microservices-netpols.yaml
 ```
+**Push the change and create a PR**
+```
+git add release/microservices-netpols.yaml
+git commit -m"adding network policies to enforce minimal connectivity"
+git push --set-upstream origin add_netpols
+```
+
+Go to https://github.com/shift-left-netconfig and open a PR. Checks will show the new connectivity map, the diff from the previous state (diff is huge because we previously had all connections allowed, and now almost all conenctions are denied), and checks against baseline rules. The `require-label-to-access-payments-service` rule is expected to fail, because `checkoutservice` misses the `usesPayments: true` label.
+
+Synthesis did not detect the baseline-requirements violation, because we didn't provide it with baseline rules.
 
 ### Apply network policies and verify security issue is fixed
 
