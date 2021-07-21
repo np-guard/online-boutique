@@ -84,6 +84,7 @@ spec:
     metadata:
       labels:
         app: checkoutservice
+        usesPayments: "true"
     spec:
       serviceAccountName: default
       containers:
