@@ -55,7 +55,7 @@ Synthesis did not detect the baseline-requirements violation, because we didn't 
 
 ### Add baseline requirements in the synthesis process
 
-We would like to enforce that only deployments with a given label, say `payment_access: yes`,
+We would like to enforce that only deployments with a given label, say `payment_access: true`,
 will be allowed to access the payment service.
 We will rerun the synthesis tool and provide it with a baseline-rules file:
 ```
@@ -64,7 +64,19 @@ We will rerun the synthesis tool and provide it with a baseline-rules file:
 
 Since `checkoutservice` currently does not have the required label, the synthesis tool reports a conflict (currently as a warning), and the synthesized network policies should deny access. As a result, if the policies are deployed, the application breaks.
 
-After adding the right label to the deployment, synthesis should go smooth, and the application should not break.
+Add the following label after line 86 in `release/kubernetes-manifests.yaml`
+```
+        usesPayments: "true"
+```
+
+After adding the right label to the deployment, rerun analysis and synthesis (should now issue no warnings). Then push the change to the branch.
+```
+git add release/kubernetes-manifests.yaml
+git commit -m"labeling checkout service with usesPayments=true"
+git push --set-upstream origin add_netpols
+```
+
+All checks now pass and branch can be merged into master.
 
 ### Apply network policies and verify security issue is fixed
 
@@ -79,20 +91,9 @@ command terminated with exit code 1
 ```
 This shows that the frontend can no longer connect to the payment-service.
 
-### Show connectivity diff
-The Network Connectivity Analyzer tool also allows us to compare connectivity configurations, producing a semantic diff showing which connections are added/removed.
-```
- ../network-config-analyzer/venv/Scripts/python ../network-config-analyzer/network-config-analyzer/nca.py --semantic_diff release/microservices-netpols.yaml --base_np_list release/microservices-netpols2.yaml --pod_list release/kubernetes-manifests.yaml --ns_list release
-```
-
-### Check connectivity configuration against baseline requirements
-Whenever the connectivity configuration is automatically synthesized using baseline requirements, it is correct by construction (should satisfy all baseline rules). However, if a configuration is manually changed or if it is synthesized with only a partial set of rules, it may not satisfy all rules. We can verify all rules are satisfied by a given configuration by running the **baseline-rules verifier**.
-```
-../baseline-rules-verifier/venv/Scripts/python ../baseline-rules-verifier/src/baseline_verify.py release/microservices-netpols2.yaml --repo release -b ../netpol-synthesizer/baseline-rules/examples/restrict_access_to_payment.yaml
-../baseline-rules-verifier/venv/Scripts/python ../baseline-rules-verifier/src/baseline_verify.py release/microservices-netpols.yaml --repo release -b ../netpol-synthesizer/baseline-rules/examples/restrict_access_to_payment.yaml
-```
-
 
 ### Cleaning
 * Clean deployments and services: `kubectl delete -f release/kubernetes-manifests.yaml`
 * Clean network policies: `kubectl delete -f release/microservices-netpols.yaml`
+* Close GitHub PR and delete its branch
+* Delete branch locally: `git branch -d add_netpols`
