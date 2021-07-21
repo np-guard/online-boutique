@@ -68,7 +68,15 @@ Add the following label after line 86 in `release/kubernetes-manifests.yaml`
 ```
         usesPayments: "true"
 ```
+
 After adding the right label to the deployment, rerun analysis and synthesis (should now issue no warnings). Then push the change to the branch.
+```
+git add release/kubernetes-manifests.yaml
+git commit -m"labeling checkout service with usesPayments=true"
+git push --set-upstream origin add_netpols
+```
+
+All checks now pass and branch can be merged into master.
 
 ### Apply network policies and verify security issue is fixed
 
