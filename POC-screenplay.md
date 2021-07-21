@@ -17,8 +17,11 @@ We assume that the following tools are already properly installed under the demo
 1. Copy-paste the external IP into a browser, to make sure the application is running
 
 ### Expose a security issue with the application
-Frontend can actually connect to payment-service directly.
-1. Run `kubectl exec frontend-54d58d8c84-dz9p2 -- wget paymentservice:50051` (replace pod-name with the actual name)
+**Frontend can actually connect to payment-service directly.**
+This can be demonstrated by running the following command (replace pod-name with the actual name):
+```
+kubectl exec frontend-54d58d8c84-dz9p2 -- wget paymentservice:50051
+```
 
 The output looks like
 ```
