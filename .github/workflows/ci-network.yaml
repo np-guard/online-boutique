@@ -4,13 +4,10 @@ on:
   pull_request:
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   test:
     runs-on: ubuntu-latest
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
         with:
           path: new
@@ -18,40 +15,16 @@ jobs:
         with:
           ref: ${{ github.base_ref }}
           path: old
-      - uses: actions/checkout@v2
-        with:
-          repository:  IBM/network-config-analyzer
-          path: network-config-analyzer
-      - uses: actions/checkout@v2
-        with:
-          repository: shift-left-netconfig/baseline-rules-verifier
-          path: baseline-rules-verifier
-          submodules: recursive
-      - name: Setup Python
-        uses: actions/setup-python@v2.2.2
-        with:
-          python-version: 3.7
-          architecture: x64
-
-      - name: Install network checkers
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r  network-config-analyzer/requirements.txt
       - name: Connectivity map
-        env:
-          GHE_TOKEN: ${{ github.token }}
-        run: |
-          cd  ${{ github.workspace }}/new
-          python ${{ github.workspace }}/network-config-analyzer/network-config-analyzer/nca.py --connectivity . --pod_list release/kubernetes-manifests.yaml --ns_list release --pr_url $GITHUB_API_URL/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments --gh_token ${{ github.token }} --output_format md
+        uses: docker://ghcr.io/shift-left-netconfig/nca:1.0
+        with:
+          args: --connectivity /github/workspace/new --pod_list /github/workspace/new/release/kubernetes-manifests.yaml --ns_list /github/workspace/new/release --pr_url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments --gh_token ${{ github.token }} --output_format md
       - name: Connectivity diff
-        env:
-          GHE_TOKEN: ${{ github.token }}
-        run: |
-          cd  ${{ github.workspace }}/new
-          python ${{ github.workspace }}/network-config-analyzer/network-config-analyzer/nca.py --semantic_diff . --base_np_list ${{ github.workspace }}/old --pod_list release/kubernetes-manifests.yaml --ns_list release --pr_url $GITHUB_API_URL/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments --gh_token ${{ github.token }} --output_format md || true
+        uses: docker://ghcr.io/shift-left-netconfig/nca:1.0
+        with:
+          args: --semantic_diff /github/workspace/new --base_np_list /github/workspace/old --pod_list /github/workspace/new/release/kubernetes-manifests.yaml --ns_list /github/workspace/new/release --pr_url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments --gh_token ${{ github.token }} --output_format md
+        continue-on-error: true
       - name: Baseline requirements validation
-        env:
-          GHE_TOKEN: ${{ github.token }}
-        run: |
-          cd  ${{ github.workspace }}/new
-          python ${{ github.workspace }}/baseline-rules-verifier/src/baseline_verify.py -b ${{ github.workspace }}/baseline-rules-verifier/baseline-rules/examples/restrict_access_to_payment.yaml -b ${{ github.workspace }}/baseline-rules-verifier/baseline-rules/examples/ciso_denied_ports.yaml -r release release --pr_url $GITHUB_API_URL/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments
+        uses: docker://ghcr.io/shift-left-netconfig/baseline-rules-verifier:1.0
+        with:
+          args: -b /baseline-rules-verifier/baseline-rules/examples/restrict_access_to_payment.yaml -b /baseline-rules-verifier/baseline-rules/examples/ciso_denied_ports.yaml -r /github/workspace/new/release /github/workspace/new/release --pr_url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments --tmp_dir /tmp --gh_token ${{ github.token }}
