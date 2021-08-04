@@ -17,4 +17,4 @@ jobs:
       - name: Synthesize
         uses: docker://ghcr.io/shift-left-netconfig/netpol-synth@sha256:2f8e41357a17ab07e61555b43314b26de713eb0dd46abbc16349168402425d16
         with:
-          args: /github/home/app-net-top.json -o /github/home/netpols.yaml
+          args: /github/home/app-net-top.json
