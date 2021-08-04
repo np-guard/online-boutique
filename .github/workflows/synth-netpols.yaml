@@ -13,7 +13,7 @@ jobs:
       - name: Analyze
         uses: docker://ghcr.io/shift-left-netconfig/net-top-analyzer@sha256:f80311deae25ccfbe2a8ec9b00354fc7903fb791a08a3c425811442ff00bfd29
         with:
-          args: -dirpath  ${{ env.GITHUB_WORKSPACE }}/repo -commitid ${{ env.GITHUB_SHA }} -giturl ${{ env.GITHUB_SERVER_URL }}/${{ env.GITHUB_REPOSITORY }} -gitbranch ${{ env.GITHUB_REF }} -outputfile ${{ env.RUNNER_TEMP }}/app-net-top.json
+          args: -dirpath  ${{ github.workspace }}/repo -commitid ${{ github.sha }} -giturl ${{ env.GITHUB_SERVER_URL }}/${{ github.repository }} -gitbranch ${{ github.ref }} -outputfile ${{ runner.temp }}/app-net-top.json
       - name: Synthesize
         uses: docker://ghcr.io/shift-left-netconfig/netpol-synth@sha256:2f8e41357a17ab07e61555b43314b26de713eb0dd46abbc16349168402425d16
         with:
