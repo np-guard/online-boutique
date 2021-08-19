@@ -1,0 +1,9 @@
+name: verify-network-policies
+on:
+  workflow_dispatch:
+
+jobs:
+  verify-netpols:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: shift-left-netconfig/netpol-verify-gh-action@v0.1.0
