@@ -6,4 +6,4 @@ jobs:
   synthesize-netpols:
     runs-on: ubuntu-latest
     steps:
-      - uses: shift-left-netconfig/netpol-synthesis-gh-action@v0.1
+      - uses: shift-left-netconfig/netpol-synthesis-gh-action@v0.1.0
