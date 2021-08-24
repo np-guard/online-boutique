@@ -7,4 +7,7 @@ jobs:
   verify-netpols:
     runs-on: ubuntu-latest
     steps:
-      - uses: shift-left-netconfig/netpol-verify-gh-action@v0.1.0
+      - uses: shift-left-netconfig/netpol-verify-gh-action@v0.2.0
+        with:
+          args:
+            corporate-policies: /baseline-rules-verifier/baseline-rules/examples/ciso_denied_ports.yaml
