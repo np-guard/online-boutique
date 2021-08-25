@@ -7,4 +7,4 @@ jobs:
   report-netpols:
     runs-on: ubuntu-latest
     steps:
-      - uses: shift-left-netconfig/netpol-reports-gh-action@v0.1.0
+      - uses: shift-left-netconfig/netpol-reports-gh-action@v0.2.0
