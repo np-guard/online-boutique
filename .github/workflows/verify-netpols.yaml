@@ -9,4 +9,4 @@ jobs:
     steps:
       - uses: shift-left-netconfig/netpol-verify-gh-action@v0.2.0
         with:
-          corporate-policies: /baseline-rules-verifier/baseline-rules/examples/ciso_denied_ports.yaml
+          corporate-policies: /baseline-rules-verifier/baseline-rules/examples/online_boutique_policies.yaml
