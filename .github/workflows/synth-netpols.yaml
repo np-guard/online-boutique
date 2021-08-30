@@ -6,4 +6,9 @@ jobs:
   synthesize-netpols:
     runs-on: ubuntu-latest
     steps:
-      - uses: shift-left-netconfig/netpol-synthesis-gh-action@v0.3.0
+      - uses: actions/checkout@v2
+      - uses: shift-left-netconfig/netpol-synthesis-gh-action@v0.4.0
+        with:
+          corporate-policies: >
+            /baseline-rules-verifier/baseline-rules/examples/ciso_denied_ports.yaml
+            https://github.com/shift-left-netconfig/baseline-rules/blob/master/examples/restrict_access_to_payment.yaml
