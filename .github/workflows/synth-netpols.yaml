@@ -7,8 +7,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: shift-left-netconfig/netpol-synthesis-gh-action@v0.4.0
+      - name: Synthesize netpols
+        id: synth-netpol
+        uses: shift-left-netconfig/netpol-synthesis-gh-action@v0.5.0
         with:
           corporate-policies: >
-            /baseline-rules-verifier/baseline-rules/examples/ciso_denied_ports.yaml
+            https://github.com/shift-left-netconfig/baseline-rules/blob/master/examples/ciso_denied_ports.yaml
             https://github.com/shift-left-netconfig/baseline-rules/blob/master/examples/restrict_access_to_payment.yaml
+      - name:  Upload Netpols Yaml
+        uses: actions/upload-artifact@v2
+        with:
+          name: netpols.yaml
+          path: ${{ steps.synth-netpol.outputs.netpols }}
+      - name:  Upload App network topology
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-net-top.json
+          path: ${{ steps.synth-netpol.outputs.topology }}
+      - name: Commit changes
+        shell: sh
+        run: |
+          cd ${{ github.workspace }}
+          cp ${{ steps.synth-netpol.outputs.netpols }} release/netpols.yaml
+          git config user.name ${{ github.actor }}
+          git config user.email '${{ github.actor }}@users.noreply.github.com'
+          git add release/netpols.yaml
+          git commit -m"adding network policies to enforce minimal connectivity"
+      - name: Open PR
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: Automatic updates to NetworkPolicies
+          branch: update-netpols
+          branch-suffix: timestamp
