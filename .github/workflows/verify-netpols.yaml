@@ -9,6 +9,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Verify policies
         id: verify-policies
+        continue-on-error: true
         uses: shift-left-netconfig/netpol-verify-gh-action@v1.0.0
         with:
           corporate-policies: >
