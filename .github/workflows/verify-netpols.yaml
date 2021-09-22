@@ -15,4 +15,4 @@ jobs:
           corporate-policies: >
             /baseline-rules-verifier/baseline-rules/examples/ciso_denied_ports.yaml
             https://github.com/shift-left-netconfig/baseline-rules/blob/master/examples/restrict_access_to_payment.yaml
-      - run: echo ${{ steps.verify-policies.outputs.rule-results }}
+      - run: printf "${{ steps.verify-policies.outputs.rule-results }}"
