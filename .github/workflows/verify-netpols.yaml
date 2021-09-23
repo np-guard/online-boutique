@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Verify policies
         id: verify-policies
-        uses: shift-left-netconfig/netpol-verify-gh-action@v1.0.0
+        uses: shift-left-netconfig/netpol-verify-gh-action@master
         with:
           corporate-policies: >
             /baseline-rules-verifier/baseline-rules/examples/ciso_denied_ports.yaml
