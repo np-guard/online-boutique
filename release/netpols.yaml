@@ -11,12 +11,6 @@ spec:
         matchLabels:
           app: emailservice
   - ports:
-    - port: 50051
-    to:
-    - podSelector:
-        matchLabels:
-          app: paymentservice
-  - ports:
     - port: 3550
     to:
     - podSelector:
