@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Verify policies
         id: verify-policies
-        uses: shift-left-netconfig/netpol-verify-gh-action@master
+        uses: shift-left-netconfig/netpol-verify-gh-action@v1
         with:
           corporate-policies: >
             /baseline-rules-verifier/baseline-rules/examples/ciso_denied_ports.yaml
@@ -18,7 +18,7 @@ jobs:
         with:
           name: ${{ steps.verify-policies.outputs.policy-results-artifact }}
       - name: comment PR
-        uses: machine-learning-apps/pr-comment@master
+        uses: machine-learning-apps/pr-comment@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
