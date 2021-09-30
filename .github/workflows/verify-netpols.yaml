@@ -23,4 +23,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: ${{ steps.verify-policies.outputs.policy-results-file }}
-      - run: exit $( grep ":x:" ${{ steps.verify-policies.outputs.policy-results-file }} | wc -l )
+      - run: exit ${{ steps.verify-policies.outputs.num-violated-policies }}
