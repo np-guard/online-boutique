@@ -1,0 +1,19 @@
+name: network-connectivity-diff
+on:
+  pull_request:
+
+jobs:
+  report-netpols:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        path: new
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.base_ref }}
+        path: old
+    - uses: shift-left-netconfig/netpol-diff-gh-action@master
+      with:
+        old-path: old
+        new-path: new
