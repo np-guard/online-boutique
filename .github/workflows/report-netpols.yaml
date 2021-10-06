@@ -7,4 +7,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: shift-left-netconfig/netpol-reports-gh-action@master
+      - name: Produce connectivity report
+        id: conn-report
+        uses: shift-left-netconfig/netpol-reports-gh-action@master
+      - uses: actions/download-artifact@v2
+        with:
+          name: ${{ steps.conn-report.outputs.conn-results-artifact }}
+      - name: comment PR
+        uses: machine-learning-apps/pr-comment@1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: ${{ steps.conn-report.outputs.conn-results-file }}
