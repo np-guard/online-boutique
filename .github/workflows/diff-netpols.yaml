@@ -13,7 +13,18 @@ jobs:
       with:
         ref: ${{ github.base_ref }}
         path: old
-    - uses: shift-left-netconfig/netpol-diff-gh-action@master
+    - name: Diff versions
+      id: diff-versions
+      uses: shift-left-netconfig/netpol-diff-gh-action@master
       with:
-        old-path: old
         new-path: new
+        old-path: old
+    - uses: actions/download-artifact@v2
+      with:
+        name: ${{ steps.verify-policies.outputs.diff-results-artifact }}
+    - name: comment PR
+      uses: machine-learning-apps/pr-comment@1.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        path: ${{ steps.diff-versions.outputs.diff-results-file }}
