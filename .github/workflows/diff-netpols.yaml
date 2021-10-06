@@ -21,7 +21,7 @@ jobs:
         old-path: old
     - uses: actions/download-artifact@v2
       with:
-        name: ${{ steps.verify-policies.outputs.diff-results-artifact }}
+        name: ${{ steps.diff-versions.outputs.diff-results-artifact }}
     - name: comment PR
       uses: machine-learning-apps/pr-comment@1.0.0
       env:
