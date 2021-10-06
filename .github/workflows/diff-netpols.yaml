@@ -3,7 +3,7 @@ on:
   pull_request:
 
 jobs:
-  report-netpols:
+  diff-netpols:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -15,7 +15,7 @@ jobs:
         path: old
     - name: Diff versions
       id: diff-versions
-      uses: shift-left-netconfig/netpol-diff-gh-action@master
+      uses: shift-left-netconfig/netpol-diff-gh-action@v1
       with:
         new-path: new
         old-path: old
