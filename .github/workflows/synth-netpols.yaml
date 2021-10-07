@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Synthesize netpols
         id: synth-netpol
-        uses: shift-left-netconfig/netpol-synthesis-gh-action@master
+        uses: shift-left-netconfig/netpol-synthesis-gh-action@v2
         with:
           corporate-policies: >
             https://github.com/shift-left-netconfig/baseline-rules/blob/master/examples/ciso_denied_ports.yaml
