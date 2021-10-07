@@ -15,16 +15,16 @@ jobs:
             https://github.com/shift-left-netconfig/baseline-rules/blob/master/examples/ciso_denied_ports.yaml
       - uses: actions/download-artifact@v2
         with:
-          name: ${{ steps.diff-versions.outputs.synth-artifact }}
+          name: ${{ steps.synth-netpol.outputs.synth-artifact }}
           path: release
       - name: Commit changes
         shell: sh
         run: |
           git config user.name ${{ github.actor }}
           git config user.email '${{ github.actor }}@users.noreply.github.com'
-          git add release/${{ steps.diff-versions.outputs.synth-netpols-file-name }}
+          git add release/${{ steps.synth-netpol.outputs.synth-netpols-file-name }}
           git commit -m"adding network policies to enforce minimal connectivity"
-          rm release/${{ steps.diff-versions.outputs.connection-list-file-name }}  # avoid committing connection list
+          rm release/${{ steps.synth-netpol.outputs.connection-list-file-name }}  # avoid committing connection list
       - name: Open PR
         uses: peter-evans/create-pull-request@v3
         with:
