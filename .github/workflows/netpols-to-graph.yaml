@@ -1,4 +1,4 @@
-name: report-network-connectivity
+name: show-network-connectivity-graph
 on:
   workflow_dispatch:
 
@@ -16,8 +16,8 @@ jobs:
         with:
           name: ${{ steps.conn-report.outputs.conn-results-artifact }}
       - run: |
-        apt install graphviz
-        dot -Tpng ${{ steps.conn-report.outputs.conn-results-file }} -o connectivity-graph.png
+          apt install graphviz
+          dot -Tpng ${{ steps.conn-report.outputs.conn-results-file }} -o connectivity-graph.png
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
