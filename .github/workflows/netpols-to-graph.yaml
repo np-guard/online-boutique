@@ -1,6 +1,6 @@
 name: show-network-connectivity-graph
 on:
-  workflow_dispatch:
+  pull_request:
 
 jobs:
   report-connectivity:
