@@ -16,7 +16,7 @@ jobs:
         with:
           name: ${{ steps.conn-report.outputs.conn-results-artifact }}
       - run: |
-          apt install graphviz
+          sudo apt install graphviz
           dot -Tpng ${{ steps.conn-report.outputs.conn-results-file }} -o connectivity-graph.png
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
