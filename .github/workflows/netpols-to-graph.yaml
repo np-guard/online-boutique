@@ -1,0 +1,25 @@
+name: report-network-connectivity
+on:
+  workflow_dispatch:
+
+jobs:
+  report-connectivity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Produce connectivity report
+        id: conn-report
+        uses: shift-left-netconfig/netpol-reports-gh-action@v1
+        with:
+          output-format: dot
+      - uses: actions/download-artifact@v2
+        with:
+          name: ${{ steps.conn-report.outputs.conn-results-artifact }}
+      - run: |
+        apt install graphviz
+        dot -Tpng ${{ steps.conn-report.outputs.conn-results-file }} -o connectivity-graph.png
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: connectivity-graph
+          path: connectivity-graph.png
