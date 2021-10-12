@@ -23,6 +23,8 @@ jobs:
       with:
         name: ${{ steps.diff-versions.outputs.diff-results-artifact }}
     - name: comment PR
-      run: gh pr comment  ${{ github.event.number }} -F ${{ steps.diff-versions.outputs.diff-results-file }}
+      run: |
+        cd new
+        gh pr comment  ${{ github.event.number }} -F ${{ steps.diff-versions.outputs.diff-results-file }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
