@@ -27,3 +27,5 @@ jobs:
           git commit -m"adding network policies to enforce minimal connectivity"
           git push --set-upstream origin add_netpols
           gh pr create -B master -H add_netpols -t "Adding network policies to enforce minimal connectivity" -b "Automatically generated NetworkPolicies" 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
