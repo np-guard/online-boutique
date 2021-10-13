@@ -22,12 +22,8 @@ jobs:
         run: |
           git config user.name ${{ github.actor }}
           git config user.email '${{ github.actor }}@users.noreply.github.com'
+          git checkout -b add_netpols
           git add release/${{ steps.synth-netpol.outputs.synth-netpols-file-name }}
           git commit -m"adding network policies to enforce minimal connectivity"
-          rm release/${{ steps.synth-netpol.outputs.connection-list-file-name }}  # avoid committing connection list
-      - name: Open PR
-        uses: peter-evans/create-pull-request@v3
-        with:
-          title: Automatic updates to NetworkPolicies
-          branch: update-netpols
-          branch-suffix: timestamp
+          git push --set-upstream origin add_netpols
+          gh pr create -B master -H add_netpols -t "Adding network policies to enforce minimal connectivity" -b "Automatically generated NetworkPolicies" 
