@@ -19,11 +19,11 @@ jobs:
           name: ${{ steps.conn-report.outputs.conn-results-artifact }}
       - name: create png file and push to repo
         run: |
-          sudo apt install graphviz
-          dot -Tpng ${{ steps.conn-report.outputs.conn-results-file }} -o release/connectivity-graph.png
           git config user.name ${{ github.actor }}
           git config user.email '${{ github.actor }}@users.noreply.github.com'
           git checkout for_graphs
+          sudo apt install graphviz
+          dot -Tpng ${{ steps.conn-report.outputs.conn-results-file }} -o release/connectivity-graph.png
           git add release/connectivity-graph.png
           git commit -m"adding connectivity graph"
           git push
@@ -31,4 +31,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: connectivity-graph
-          path: connectivity-graph.png
+          path: release/connectivity-graph.png
