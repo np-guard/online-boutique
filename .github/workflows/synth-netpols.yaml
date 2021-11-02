@@ -22,10 +22,11 @@ jobs:
         run: |
           git config user.name ${{ github.actor }}
           git config user.email '${{ github.actor }}@users.noreply.github.com'
-          git checkout -b add_netpols
+          export branch_name=set_netpols_$(date +%s)
+          git checkout -b $branch_name
           git add release/${{ steps.synth-netpol.outputs.synth-netpols-file-name }}
           git commit -m"adding network policies to enforce minimal connectivity"
-          git push --set-upstream origin add_netpols
-          gh pr create -B master -H add_netpols -t "Adding network policies to enforce minimal connectivity" -b "Automatically generated NetworkPolicies" 
+          git push --set-upstream origin $branch_name
+          gh pr create -B master -H $branch_name -t "Adding network policies to enforce minimal connectivity" -b "Automatically generated NetworkPolicies" 
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_SCOPED_TOKEN }}
