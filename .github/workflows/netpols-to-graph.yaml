@@ -23,7 +23,7 @@ jobs:
           git config user.name ${{ github.actor }}
           git config user.email '${{ github.actor }}@users.noreply.github.com'
           git commit -m"adding connectivity graph"
-          git push
+          git push HEAD:${GITHUB_HEAD_REF##*/}
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
