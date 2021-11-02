@@ -23,9 +23,10 @@ jobs:
           dot -Tpng ${{ steps.conn-report.outputs.conn-results-file }} -o release/connectivity-graph.png
           git config user.name ${{ github.actor }}
           git config user.email '${{ github.actor }}@users.noreply.github.com'
+          git checkout ${GITHUB_HEAD_REF##*/}
           git add release/connectivity-graph.png
           git commit -m"adding connectivity graph"
-          git push HEAD:${GITHUB_HEAD_REF##*/}
+          git push
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
