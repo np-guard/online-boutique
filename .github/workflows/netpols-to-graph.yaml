@@ -25,6 +25,8 @@ jobs:
           git checkout for_graphs
           sudo apt install graphviz
           dot -Tpng ${{ steps.conn-report.outputs.conn-results-file }} -o $graph_path
+          echo $graph_path
+          ls -l $graph_path
           git add $graph_path
           git commit -m"adding connectivity graph"
           git push
