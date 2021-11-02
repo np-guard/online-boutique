@@ -17,18 +17,20 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: ${{ steps.conn-report.outputs.conn-results-artifact }}
-      - name: create png file and push to repo
+      - name: create png file, push to repo, add pr comment
         run: |
+          export graph_path=release/connectivity-graph_${GITHUB_REF##*/}.png
           git config user.name ${{ github.actor }}
           git config user.email '${{ github.actor }}@users.noreply.github.com'
           git checkout for_graphs
-          export graph_path=release/connectivity-graph_${GITHUB_REF##*/}.png
           sudo apt install graphviz
           dot -Tpng ${{ steps.conn-report.outputs.conn-results-file }} -o $graph_path
           git add $graph_path
           git commit -m"adding connectivity graph"
           git push
           gh pr comment  ${{ github.event.number }} -b"![connectivity-graph](https://github.com/shift-left-netconfig/online-boutique/blob/for_graphs/release/$graph_path)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
