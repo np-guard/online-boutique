@@ -23,7 +23,7 @@ jobs:
           dot -Tpng ${{ steps.conn-report.outputs.conn-results-file }} -o release/connectivity-graph.png
           git config user.name ${{ github.actor }}
           git config user.email '${{ github.actor }}@users.noreply.github.com'
-          git checkout ${GITHUB_HEAD_REF##*/}
+          git checkout for_graphs
           git add release/connectivity-graph.png
           git commit -m"adding connectivity graph"
           git push
