@@ -28,9 +28,8 @@ jobs:
           echo $graph_path
           ls -l $graph_path
           git add $graph_path
-          git diff-index --quiet HEAD || git commit -m"adding connectivity graph"
-          git push
-          gh pr comment  ${{ github.event.number }} -b"![connectivity-graph](https://github.com/shift-left-netconfig/online-boutique/blob/for_graphs/release/$graph_path)"
+          git diff-index --quiet HEAD || ( git commit -m"adding connectivity graph" && git push )
+          gh pr comment  ${{ github.event.number }} -b"![connectivity-graph](https://raw.githubusercontent.com/shift-left-netconfig/online-boutique/for_graphs/release/$graph_path)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload artifacts
