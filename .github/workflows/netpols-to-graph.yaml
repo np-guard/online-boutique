@@ -11,7 +11,7 @@ jobs:
            fetch-depth: 0
       - name: Produce connectivity report
         id: conn-report
-        uses: shift-left-netconfig/netpol-reports-gh-action@v1
+        uses: np-guard/netpol-reports-gh-action@v2
         with:
           output-format: dot
       - uses: actions/download-artifact@v2
