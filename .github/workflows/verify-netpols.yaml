@@ -9,11 +9,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: Verify policies
         id: verify-policies
-        uses: shift-left-netconfig/netpol-verify-gh-action@v1
+        uses: np-guard/netpol-verify-gh-action@v2
         with:
           corporate-policies: >
             /baseline-rules-verifier/baseline-rules/examples/ciso_denied_ports.yaml
-            https://github.com/shift-left-netconfig/baseline-rules/blob/master/examples/restrict_access_to_payment.yaml
+            https://github.com/np-guard/baseline-rules/blob/master/examples/restrict_access_to_payment.yaml
       - uses: actions/download-artifact@v2
         with:
           name: ${{ steps.verify-policies.outputs.policy-results-artifact }}
