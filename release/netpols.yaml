@@ -11,12 +11,6 @@ spec:
         matchLabels:
           app: emailservice
   - ports:
-    - port: 50051
-    to:
-    - podSelector:
-        matchLabels:
-          app: paymentservice
-  - ports:
     - port: 3550
     to:
     - podSelector:
@@ -75,6 +69,12 @@ spec:
           app: checkoutservice
     ports:
     - port: 8080
+  - from:
+    - podSelector:
+        matchLabels:
+          app: frontend
+    ports:
+    - port: 8080    
   podSelector:
     matchLabels:
       app: emailservice
@@ -88,6 +88,12 @@ metadata:
   name: frontend-netpol
 spec:
   egress:
+  - ports:
+    - port: 8080
+    to:
+    - podSelector:
+        matchLabels:
+          app: emailservice  
   - ports:
     - port: 5050
     to:
