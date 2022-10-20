@@ -27,7 +27,7 @@ jobs:
           dot -Tpng ${{ steps.conn-report.outputs.conn-results-file }} -o $graph_path
           git add $graph_path
           git diff-index --quiet HEAD || ( git commit -m"adding connectivity graph" && git push )
-          gh pr comment  ${{ github.event.number }} -b"![connectivity-graph](https://raw.githubusercontent.com/shift-left-netconfig/online-boutique/for_graphs/$graph_path)"
+          gh pr comment  ${{ github.event.number }} -b"![connectivity-graph](https://raw.githubusercontent.com/${{ github.repository }}/for_graphs/$graph_path)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload artifacts
